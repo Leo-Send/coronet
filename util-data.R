@@ -411,13 +411,13 @@ ProjectData = R6::R6Class("ProjectData",
                 self$get.commits()
             }
 
-            commit.data.subset = data.frame(hash = private$commits.unfiltered$hash, author.name = private$commits.unfiltered$author.name)
+            commit.data.subset = data.frame(hash = private$commits.unfiltered[["hash"]], author.name = private$commits.unfiltered$author.name)
             commit.data.subset = commit.data.subset[!duplicated(commit.data.subset$hash),]
 
             commit.interaction.data = merge(private$commit.interactions, commit.data.subset, by.x = "base.hash", by.y = "hash")
-            colnames(commit.interaction.data)[7] = "base.author"
+            colnames(commit.interaction.data)["author.name"] = "base.author"
             commit.interaction.data = merge(commit.interaction.data, commit.data.subset, by.x = "commit.hash", by.y = "hash")
-            colnames(commit.interaction.data)[8] = "interacting.author"
+            colnames(commit.interaction.data)["author.name"] = "interacting.author"
 
             private$commit.interactions = commit.interaction.data
 
@@ -1124,6 +1124,17 @@ ProjectData = R6::R6Class("ProjectData",
                 } else {
                     ## update all PaStA-related data
                     private$update.pasta.data()
+                }
+            }
+
+            ## add commit interaction data if wanted
+            if (private$project.conf$get.value("commit.interactions")) {
+                if (!self$is.data.source.cached("commit.interactions")) {
+                    ## get data (no assignment because we just want to trigger anything commit.interaction related)
+                    self$get.commit.interactions()
+                } else {
+                    ## update all commit.interaction-related data
+                    private$update.commit.interactions()
                 }
             }
 
