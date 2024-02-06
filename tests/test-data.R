@@ -511,3 +511,18 @@ test_that("Create RangeData objects from Codeface ranges and check data path", {
 
     expect_identical(range.paths, expected.paths, "RangeData data paths")
 })
+
+test_that("Compare two ProjectData Objects with commit.interactions", {
+    ## configuration object for the datapath
+    proj.conf = ProjectConf$new(CF.DATA, CF.SELECTION.PROCESS, CASESTUDY, "file")
+    proj.conf$update.value("commit.interactions", TRUE)
+    proj.conf$update.value("commits.filter.untracked.files", FALSE)
+    proj.conf$update.value("commits.filter.base.artifact", FALSE)
+
+    proj.data.one = ProjectData$new(project.conf = proj.conf)
+    proj.data.two = proj.data.one$clone(deep = TRUE)
+
+    ## test if the project data is equal and the commit interactions are as well
+    expect_true(proj.data.one$equals(proj.data.two))
+    expect_equal(proj.data.one$get.commit.interactions(), proj.data.two$get.commit.interactions())
+})
