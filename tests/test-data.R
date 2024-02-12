@@ -523,6 +523,10 @@ test_that("Compare two ProjectData Objects with commit.interactions", {
     proj.data.two = proj.data.one$clone(deep = TRUE)
 
     ## test if the project data is equal and the commit interactions are as well
-    expect_true(proj.data.one$equals(proj.data.two))
     expect_equal(proj.data.one$get.commit.interactions(), proj.data.two$get.commit.interactions())
+    expect_true(proj.data.one$equals(proj.data.two))
+
+    ## change commit interactions of one project data and assert that equality check fails
+    proj.data.two$set.commit.interactions(create.empty.commit.interaction.list())
+    expect_false(proj.data.one$equals(proj.data.two))
 })
