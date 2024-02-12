@@ -26,6 +26,7 @@
 ## Copyright 2021 by Mirabdulla Yusifli <s8miyusi@stud.uni-saarland.de>
 ## Copyright 2022 by Jonathan Baumann <joba00002@stud.uni-saarland.de>
 ## Copyright 2022-2023 by Maximilian Löffler <s8maloef@stud.uni-saarland.de>
+## Copyright 2024 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
 ## All Rights Reserved.
 
 
@@ -77,7 +78,8 @@ DATASOURCE.TO.ADDITIONAL.ARTIFACT.FUNCTION = list(
     "synchronicity"           = "get.synchronicity",
     "pasta"                   = "get.pasta",
     "gender"                  = "get.gender",
-    "custom.event.timestamps" = "get.custom.event.timestamps"
+    "custom.event.timestamps" = "get.custom.event.timestamps",
+    "commit.interactions"     = "get.commit.interactions"
 )
 
 #' Applies a function to list keys
@@ -410,15 +412,15 @@ ProjectData = R6::R6Class("ProjectData",
             if (!self$is.data.source.cached("commits.unfiltered")) {
                 self$get.commits()
             }
-
-            commit.data.subset = data.frame(hash = private$commits.unfiltered[["hash"]], author.name = private$commits.unfiltered$author.name)
-            commit.data.subset = commit.data.subset[!duplicated(commit.data.subset$hash),]
-
+            commit.data.subset = data.frame(hash = private$commits.unfiltered[["hash"]], author.name = private$commits.unfiltered[["author.name"]])
+            commit.data.subset = commit.data.subset[!duplicated(commit.data.subset[["hash"]]),]
+            
             commit.interaction.data = merge(private$commit.interactions, commit.data.subset, by.x = "base.hash", by.y = "hash")
-            colnames(commit.interaction.data)["author.name"] = "base.author"
-            commit.interaction.data = merge(commit.interaction.data, commit.data.subset, by.x = "commit.hash", by.y = "hash")
-            colnames(commit.interaction.data)["author.name"] = "interacting.author"
+            colnames(commit.interaction.data)[[7]] = "base.author"
 
+            commit.interaction.data = merge(commit.interaction.data, commit.data.subset, by.x = "commit.hash", by.y = "hash")
+            colnames(commit.interaction.data)[[8]] = "interacting.author"
+            
             private$commit.interactions = commit.interaction.data
 
         },
