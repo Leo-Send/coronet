@@ -27,10 +27,10 @@ context("Tests for the file 'util-core-peripheral.R'")
 ## Context
 ##
 
-CF.DATA = file.path(".", "codeface-data")
-CF.SELECTION.PROCESS = "testing"
-CASESTUDY = "test"
-ARTIFACT = "feature"
+CF.DATA = file.path("../../../Bachelorthesis/bachelorthesis/Classification_Tool/codeforce_data", "codeface-data")
+CF.SELECTION.PROCESS = "threemonth"
+CASESTUDY = "coronet"
+ARTIFACT = "function"
 
 ## use only when debugging this file independently
 if (!dir.exists(CF.DATA)) CF.DATA = file.path(".", "tests", "codeface-data")
@@ -42,12 +42,17 @@ proj.conf$update.value("issues.only.comments", FALSE)
 proj.data = ProjectData$new(proj.conf)
 
 net.conf = NetworkConf$new()
+net.conf$update.value("author.relation", "cochange")
 net.builder = NetworkBuilder$new(proj.data, net.conf)
 
 network = net.builder$get.author.network()
 
 test_that("Vertex-degree classification using 'restrict.classification.to.authors'", {
-
+resa = get.author.class.network.betweenness(network)
+resb = get.author.class.network.closeness(network)
+resc = get.author.class.network.pagerank(network)
+resd = get.author.class.network.eccentricity(network)
+browser()
     ## Act
     result = get.author.class.network.degree(network,
                                              restrict.classification.to.authors = c("Olaf", "Björn", "Darth Sidious"))
