@@ -15,7 +15,7 @@
 - Add commit network as a new type of network. It uses commits as vertices and connects them either via cochange or commit interactions. This includes adding new config parameters and the function `add.vertex.attribute.commit.network` for adding vertex attributes to a commit network (PR #263, ab73271781e8e9a0715f784936df4b371d64c338, ab73271781e8e9a0715f784936df4b371d64c338, cd9a930fcb54ff465c2a5a7c43cfe82ac15c134d)
 - Add `remove.duplicate.edges` function that takes a network as input and conflates identical edges (PR #268, d9a4be417b340812b744f59398ba6460ba527e1c, 0c2f47c4fea6f5f2f582c0259f8cf23af985058a, c6e90dd9cb462232563f753f414da14a24b392a3)
 - Add `cumulative` as an argument to `construct.ranges` which enables the creation of cumulative ranges from given revisions (PR #268, a135f6bb6f83ccb03ae27c735c2700fccc1ee0c8, 8ec207f1e306ef6a641fb0205a9982fa89c7e0d9)
-- Add four new metric which can be used for the classification of authors into core and peripheral: Betweenness, Closeness, Pagerank and Eccentricity (PR #276, 65d5c9cc86708777ef458b0c2e744ab4b846bdd1, b392d1a125d0f306b4bce8d95032162a328a3ce2, c5d37d40024e32ad5778fa5971a45bc08f7631e0)
+- Add four new metrics that can be used for the classification of authors into core and peripheral: Betweenness, Closeness, Pagerank and Eccentricity (PR #276, 65d5c9cc86708777ef458b0c2e744ab4b846bdd1, b392d1a125d0f306b4bce8d95032162a328a3ce2, c5d37d40024e32ad5778fa5971a45bc08f7631e0)
 
 ### Changed/Improved
 
