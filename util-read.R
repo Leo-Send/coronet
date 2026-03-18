@@ -25,7 +25,7 @@
 ## Copyright 2021 by Mirabdulla Yusifli <s8miyusi@stud.uni-saarland.de>
 ## Copyright 2022 by Jonathan Baumann <joba00002@stud.uni-saarland.de>
 ## Copyright 2022-2023, 2025 by Maximilian Löffler <s8maloef@stud.uni-saarland.de>
-## Copyright 2024 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
+## Copyright 2024-2026 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
 ## Copyright 2026 by Ritika Hiremath <rihi00002@stud.uni-saarland.de>
 ## All Rights Reserved.
 
@@ -398,6 +398,13 @@ read.issues = function(data.path, issues.sources = c("jira", "github", "zulip"))
     issue.data[["issue.components"]] = I(unname(lapply(issue.data[["issue.components"]], jsonlite::fromJSON, simplifyVector = FALSE)))
     issue.data[["event.info.2"]] = I(unname(lapply(issue.data[["event.info.2"]], jsonlite::fromJSON, simplifyVector = FALSE)))
 
+    issue.data[["issue.components"]] = lapply(issue.data[["issue.components"]], function(numbers) {
+        num.vector = unlist(numbers)
+        ids = lapply(num.vector, function(id) {
+            return(sprintf(ISSUE.ID.FORMAT, "github", id))
+        })
+        return(ids)
+    })
     ## convert dates and sort by 'date' column
     issue.data[["date"]] = get.date.from.string(issue.data[["date"]])
     issue.data[["creation.date"]] = get.date.from.string(issue.data[["creation.date"]])
@@ -458,7 +465,7 @@ create.empty.issues.list = function() {
 ## 'bots.list' and function \code{read.bot.list})
 BOT.LIST.COLUMNS = c(
     "author.name", "author.email", ## author
-    "is.bot" ## whether this is a bot
+    "is.bot", "is.agent" ## whether this is a bot or an agent
 )
 
 #' Read the bot classification from the 'bots.list' file.
@@ -487,8 +494,10 @@ read.bot.info = function(data.path) {
     }
 
     ## set column names for new data frame
+    bot.data[[4]] = bot.data[[3]]
     colnames(bot.data) = BOT.LIST.COLUMNS
-    bot.data["is.bot"] = sapply(bot.data[["is.bot"]], function(x) switch(x, Bot = TRUE, Human = FALSE, NA))
+    bot.data["is.bot"] = sapply(bot.data[["is.bot"]], function(x) switch(x, Bot = TRUE, Human = FALSE, Agent = FALSE, NA))
+    bot.data["is.agent"] = sapply(bot.data[["is.agent"]], function(x) switch(x, Agent = TRUE, Human = FALSE, Bot = FALSE, NA))
 
     ## check that dataframe is of correct shape
     verify.data.frame.columns(bot.data, BOT.LIST.COLUMNS)
@@ -500,7 +509,7 @@ read.bot.info = function(data.path) {
 
 ## column names of a dataframe containing authors (see file 'authors.list' and function \code{read.authors})
 AUTHORS.LIST.COLUMNS = c(
-    "author.id", "author.name", "author.email", "is.bot"
+    "author.id", "author.name", "author.email", "is.bot", "is.agent"
 )
 
 ## column names of a dataframe containing authors, before adding bot data.
@@ -508,7 +517,7 @@ AUTHORS.LIST.COLUMNS.WITHOUT.BOTS = AUTHORS.LIST.COLUMNS[1:3]
 
 ## declare the datatype for each column in the constant 'AUTHORS.LIST.COLUMNS'
 AUTHORS.LIST.DATA.TYPES = c(
-    "character", "character", "character", "logical"
+    "character", "character", "character", "logical", "logical"
 )
 
 #' Read the author data from the 'authors.list' file.
