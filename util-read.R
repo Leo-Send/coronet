@@ -25,7 +25,7 @@
 ## Copyright 2021 by Mirabdulla Yusifli <s8miyusi@stud.uni-saarland.de>
 ## Copyright 2022 by Jonathan Baumann <joba00002@stud.uni-saarland.de>
 ## Copyright 2022-2023, 2025 by Maximilian Löffler <s8maloef@stud.uni-saarland.de>
-## Copyright 2024-2026 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
+## Copyright 2024, 2026 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
 ## Copyright 2026 by Ritika Hiremath <rihi00002@stud.uni-saarland.de>
 ## All Rights Reserved.
 
@@ -472,7 +472,7 @@ BOT.LIST.COLUMNS = c(
 #'
 #' @param data.path the path to the commit-messages list
 #'
-#' @return a data frame with author.name, author.email, and a (potentially NA) boolean whether this is a bot,
+#' @return a data frame with author.name, author.email, and two (potentially NA) booleans whether this is a bot or an agent,
 #'         or \code{NULL} if the above file is not present.
 read.bot.info = function(data.path) {
     logging::logdebug("read.bot.info: starting.")
@@ -555,6 +555,7 @@ read.authors = function(data.path) {
         ## if bot data is not available, add NA data, which is what would have happened
         ## if the file was empty
         authors.df[["is.bot"]] = NA
+        authors.df[["is.agent"]] = NA
     }
 
     ## order by author name

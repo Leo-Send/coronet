@@ -23,7 +23,7 @@
 ## Copyright 2021 by Niklas Schneider <s8nlschn@stud.uni-saarland.de>
 ## Copyright 2022 by Jonathan Baumann <joba00002@stud.uni-saarland.de>
 ## Copyright 2023-2025 by Maximilian Löffler <s8maloef@stud.uni-saarland.de>
-## Copyright 2024-2026 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
+## Copyright 2024, 2026 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
 ## All Rights Reserved.
 
 
@@ -738,8 +738,9 @@ NetworkBuilder = R6::R6Class("NetworkBuilder",
                                                artifacts.net.data.raw$event.info.2 == "issue", ]
             referenced.bys = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "referenced_by" &
                                                artifacts.net.data.raw$event.info.2 == "issue", ]
-            components = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "sub_issue_added",]
-            unique(components, by = 1)
+            components = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "sub_issue_added", ]
+            components <- components[!duplicated(components[[1]]), , drop = FALSE]
+            connected.issues = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "connected" & artifacts.net.data.raw$event.info.1 != "external", ]
             ## the codeface extraction for jira issues creates duplicate events, linking the referenced issue
             ## to the referencing issue, in addition to the correct events, linking the referencing issue to
             ## the referenced issue. We can only deduplicate them, if we build an undirected network, as otherwise,
@@ -832,11 +833,22 @@ NetworkBuilder = R6::R6Class("NetworkBuilder",
                 }))
                 return(edges)
             }))
-            edge.list = rbind(edge.list, component.edges)
+            edge.list = plyr::rbind.fill(edge.list, component.edges)
+
+            connected.edges = plyr::rbind.fill(parallel::mclapply(split(connected.issues, seq_len(nrow(connected.issues))), function(from) {
+                cols.which = edge.attributes %in% colnames(from)
+                edge.attrs = from[, edge.attributes[cols.which], drop = FALSE]
+                edge = list("from" = from[["issue.id"]], "to" = from[["event.info.1"]])
+                edge = cbind(edge, edge.attrs, row.names = NULL)
+                return(edge)
+            }))
+            edge.list = plyr::rbind.fill(edge.list, connected.edges)
+
+            all.vertices = unique(c(vertices, component.edges[["to"]], connected.edges[["to"]]))
 
             ## construct network data
             network.data = private$construct.network.data(
-                vertex.data = data.frame(name = vertices),
+                vertex.data = data.frame(name = all.vertices),
                 edge.data = edge.list,
                 possible.edge.attributes = private$proj.data$get.data.columns.for.data.source("issues")
             )
