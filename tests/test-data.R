@@ -484,7 +484,7 @@ test_that("Filter bots from issue data", {
     filtered.issues = proj.data$get.issues()
 
     expect_true(all(filtered.issues[["author.name"]] != "Thomas"))
-    ## there are now 47 issue events remaining, since 10 issue events have been removed during filtering
+    ## there are now 47 issue events remaining, since 20 issue events have been removed during filtering
     expect_equal(nrow(filtered.issues), 47)
 })
 
@@ -501,6 +501,22 @@ test_that("Filter bots from mail data", {
     expect_true(all(filtered.mails[["author.name"]] != "Thomas"))
     ## there are now 15 mails remaining, since 2 mails have been removed during filtering
     expect_equal(nrow(filtered.mails), 15)
+})
+
+test_that("Filter agents from issue data", {
+    proj.conf = ProjectConf$new(CF.DATA, CF.SELECTION.PROCESS, CASESTUDY, ARTIFACT)
+    proj.conf$update.value("issues.from.source", c("jira", "github"))
+    proj.conf$update.value("filter.agents", TRUE)
+    ## disable all other filterings
+    proj.conf$update.value("issues.only.comments", FALSE)
+
+    proj.data = ProjectData$new(proj.conf)
+
+    filtered.issues = proj.data$get.issues()
+
+    expect_true(all(filtered.issues[["author.name"]] != "Copilot"))
+    ## there are now 65 issue events remaining, since 2 issue events have been removed during filtering
+    expect_equal(nrow(filtered.issues), 65)
 })
 
 test_that("Re-read custom events after config change", {
