@@ -309,7 +309,7 @@ test_that("Issue-count classification" , {
     result = get.author.class.issue.count(proj.data, issue.type = "all")
 
     ## Assert
-    expected.core = data.frame(author.name = c("Björn", "Olaf", "Thomas"), issue.count = c(6, 6, 6))
+    expected.core = data.frame(author.name = c("Björn", "Olaf", "Thomas", "Copilot"), issue.count = c(6, 6, 6, 2))
     expected.peripheral = data.frame(author.name = c("Karl", "Max", "udo"), issue.count = c(2, 1, 1))
     expected = list(core = expected.core, peripheral = expected.peripheral)
 

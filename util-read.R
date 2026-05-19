@@ -399,23 +399,31 @@ read.issues = function(data.path, issues.sources = c("jira", "github", "zulip"))
     issue.data[["event.info.2"]] = I(unname(lapply(issue.data[["event.info.2"]], jsonlite::fromJSON, simplifyVector = FALSE)))
 
     issue.data[["issue.components"]] = lapply(issue.data[["issue.components"]], function(numbers) {
+        if(!is.list(numbers)) {
+            return(numbers)
+        }
         num.vector = unlist(numbers)
+        # if list is not only integers, return it as is (e.g., for Jira, where components are stored as list of strings)
+        if (!all(sapply(num.vector, is.numeric))) {
+            return(numbers)
+        }
         ids = lapply(num.vector, function(id) {
             return(sprintf(ISSUE.ID.FORMAT, "github", id))
         })
         return(ids)
     })
+    attr(issue.data[["issue.components"]], "class") = "AsIs"
     ## convert dates and sort by 'date' column
     issue.data[["date"]] = get.date.from.string(issue.data[["date"]])
     issue.data[["creation.date"]] = get.date.from.string(issue.data[["creation.date"]])
     issue.data[["closing.date"]] = get.date.from.string(issue.data[["closing.date"]])
 
     ## if other issues are referenced, convert names to ID format
-    matches = issue.data[issue.data[["event.name"]] %in% c("add_link", "remove_link", "referenced_by") &
-                         issue.data[["event.info.2"]] == "issue", ]
+    matches = issue.data[issue.data[["event.name"]] %in% c("add_link", "remove_link", "referenced_by", "connected") &
+                         (issue.data[["event.info.2"]] == "issue" | issue.data[["event.name"]] == "connected"), ]
     formatted.matches = sprintf(ISSUE.ID.FORMAT, matches[["issue.source"]], matches[["event.info.1"]])
-    issue.data[issue.data[["event.name"]] %in% c("add_link", "remove_link", "referenced_by") &
-               issue.data[["event.info.2"]] == "issue", ][["event.info.1"]] = formatted.matches
+    issue.data[issue.data[["event.name"]] %in% c("add_link", "remove_link", "referenced_by", "connected") &
+               (issue.data[["event.info.2"]] == "issue" | issue.data[["event.name"]] == "connected"), ][["event.info.1"]] = formatted.matches
 
     if (nrow(issue.data) > 0) {
         ## fix all dates to be after the creation date
