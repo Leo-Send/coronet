@@ -2,6 +2,12 @@
 
 # coronet – Changelog
 
+## Unreleased
+
+### Added
+
+- Add Zulip as a supported issue source for `issues.from.source` (2bbc9525f35f2fc53c586dec1192517e57e040f5 , d7b47b7ddb943f918b631ef8c194bde6caa94537, 1f34ee061f59ae06588dc4c9e83ebbad8ad7ffe1)
+
 ## 5.1
 
 ### Added
