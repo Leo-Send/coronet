@@ -26,6 +26,7 @@
 ## Copyright 2022 by Jonathan Baumann <joba00002@stud.uni-saarland.de>
 ## Copyright 2022-2023, 2025 by Maximilian Löffler <s8maloef@stud.uni-saarland.de>
 ## Copyright 2024 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
+## Copyright 2026 by Ritika Hiremath <rihi00002@stud.uni-saarland.de>
 ## All Rights Reserved.
 
 ## Note:
@@ -339,10 +340,10 @@ ISSUES.LIST.DATA.TYPES = c(
 #' The original date of these events can always be found in the \code{"event.info.2"} column.
 #'
 #' @param data.path the path to the issue data
-#' @param issues.sources the sources of the issue data. One or both of \code{"jira"} and \code{"github"}.
+#' @param issues.sources the sources of the issue data. One or more of \code{"jira"}, \code{"github"}, and \code{"zulip"}.
 #'
 #' @return the read and parsed issue data
-read.issues = function(data.path, issues.sources = c("jira", "github")) {
+read.issues = function(data.path, issues.sources = c("jira", "github", "zulip")) {
     logging::logdebug("read.issues: starting.")
 
     ## check arguments

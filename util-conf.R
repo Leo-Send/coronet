@@ -28,6 +28,7 @@
 ## Copyright 2022 by Jonathan Baumann <joba00002@stud.uni-saarland.de>
 ## Copyright 2024 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
 ## Copyright 2025 by Maximilian Löffler <s8maloef@stud.uni-saarland.de>
+## Copyright 2026 by Ritika Hiremath <rihi00002@stud.uni-saarland.de>
 ## All Rights Reserved.
 
 
@@ -427,7 +428,7 @@ ProjectConf = R6::R6Class("ProjectConf", inherit = Conf,
             issues.from.source = list(
                 default = "github",
                 type = "character",
-                allowed = c("github", "jira"),
+                allowed = c("github", "jira", "zulip"),
                 allowed.number = Inf
             ),
             issues.locked = list(
