@@ -739,6 +739,8 @@ NetworkBuilder = R6::R6Class("NetworkBuilder",
             referenced.bys = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "referenced_by" &
                                                artifacts.net.data.raw$event.info.2 == "issue", ]
             components = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "sub_issue_added", ]
+            # sort components by date to ensure that all edges are created at the last possible date, meaning when the last sub-issue is added to the issue
+            components <- components[rev(order(components$date)), ]
             components <- components[!duplicated(components[[1]]), , drop = FALSE]
             connected.issues = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "connected" & artifacts.net.data.raw$event.info.1 != "external", ]
             ## the codeface extraction for jira issues creates duplicate events, linking the referenced issue

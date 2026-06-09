@@ -420,10 +420,12 @@ read.issues = function(data.path, issues.sources = c("jira", "github", "zulip"))
 
     ## if other issues are referenced, convert names to ID format
     matches = issue.data[issue.data[["event.name"]] %in% c("add_link", "remove_link", "referenced_by", "connected") &
-                         (issue.data[["event.info.2"]] == "issue" | issue.data[["event.name"]] == "connected"), ]
+                         (issue.data[["event.info.2"]] == "issue" | (issue.data[["event.name"]] == "connected" &
+                                                                     issue.data[["event.info.1"]] != "external")), ]
     formatted.matches = sprintf(ISSUE.ID.FORMAT, matches[["issue.source"]], matches[["event.info.1"]])
     issue.data[issue.data[["event.name"]] %in% c("add_link", "remove_link", "referenced_by", "connected") &
-               (issue.data[["event.info.2"]] == "issue" | issue.data[["event.name"]] == "connected"), ][["event.info.1"]] = formatted.matches
+               (issue.data[["event.info.2"]] == "issue" | (issue.data[["event.name"]] == "connected" &
+                                                           issue.data[["event.info.1"]] != "external")), ][["event.info.1"]] = formatted.matches
 
     if (nrow(issue.data) > 0) {
         ## fix all dates to be after the creation date
