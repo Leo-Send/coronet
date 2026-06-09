@@ -123,7 +123,7 @@ patrick::with_parameters_test_that("Network construction of an issue-based artif
         to = c("<issue-github-2>", "<issue-github-2>", "<issue-github-6>", "<issue-jira-ZEPPELIN-332>",
                "<issue-github-6>", "<issue-github-6>", "<issue-github-6>"),
         date = get.date.from.string(c("2016-08-07 15:30:00", "2016-08-07 15:33:00", "2016-08-07 15:37:02",
-                                      "2017-05-21 12:00:00", "2016-08-07 15:39:00", "2016-08-07 16:22:00", "2016-08-07 16:22:00")),
+                                      "2017-05-21 12:00:00", "2016-08-07 15:41:00", "2016-08-07 16:22:00", "2016-08-07 16:22:00")),
         artifact.type = c("IssueEvent", "IssueEvent", "IssueEvent", "IssueEvent", "IssueEvent", "IssueEvent", "IssueEvent"),
         issue.id = c("<issue-github-3>", "<issue-github-3>", "<issue-github-3>", "<issue-jira-ZEPPELIN-328>",
                      "<issue-github-3>", "<issue-github-3>", "<issue-github-6>"),

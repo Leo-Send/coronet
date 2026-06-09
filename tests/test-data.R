@@ -503,6 +503,22 @@ test_that("Filter bots from mail data", {
     expect_equal(nrow(filtered.mails), 15)
 })
 
+test_that("Filter agents from commit data", {
+    proj.conf = ProjectConf$new(CF.DATA, CF.SELECTION.PROCESS, CASESTUDY, ARTIFACT)
+    proj.conf$update.value("filter.agents", TRUE)
+    ## disable all other filterings
+    proj.conf$update.value("commits.filter.base.artifact", FALSE)
+    proj.conf$update.value("commits.filter.untracked.files", FALSE)
+
+    proj.data = ProjectData$new(proj.conf)
+
+    filtered.commits = proj.data$get.commits()
+
+    expect_true(all(filtered.commits[["author.name"]] != "Karl"))
+    ## there are now 8 rows in the filtered commit data, since 2 rows have been removed during filtering
+    expect_equal(nrow(filtered.commits), 8)
+})
+
 test_that("Filter agents from issue data", {
     proj.conf = ProjectConf$new(CF.DATA, CF.SELECTION.PROCESS, CASESTUDY, ARTIFACT)
     proj.conf$update.value("issues.from.source", c("jira", "github"))
@@ -515,8 +531,24 @@ test_that("Filter agents from issue data", {
     filtered.issues = proj.data$get.issues()
 
     expect_true(all(filtered.issues[["author.name"]] != "Copilot"))
+    expect_true(all(filtered.issues[["author.name"]] != "Karl"))
     ## there are now 65 issue events remaining, since 2 issue events have been removed during filtering
-    expect_equal(nrow(filtered.issues), 65)
+    expect_equal(nrow(filtered.issues), 57)
+})
+
+test_that("Filter agents from mail data", {
+    proj.conf = ProjectConf$new(CF.DATA, CF.SELECTION.PROCESS, CASESTUDY, ARTIFACT)
+    proj.conf$update.value("filter.agents", TRUE)
+    ## disable all other filterings
+    proj.conf$update.value("mails.filter.patchstack.mails", FALSE)
+
+    proj.data = ProjectData$new(proj.conf)
+
+    filtered.mails = proj.data$get.mails()
+
+    expect_true(all(filtered.mails[["author.name"]] != "Fritz"))
+    ## there are now 16 mails remaining, since 1 mails have been removed during filtering
+    expect_equal(nrow(filtered.mails), 15)
 })
 
 test_that("Re-read custom events after config change", {

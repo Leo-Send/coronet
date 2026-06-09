@@ -259,8 +259,8 @@ test_that("Read the author data.", {
         author.email = c("bjoern@example.org", "copilot@example.org", "asd@sample.org",
                          "heinz@example.org", "hans1@example.org", "karl@example.org",
                          "max@example.org", "olaf@example.org", "thomas@example.org", "udo@example.org"),
-        is.bot = c(FALSE, FALSE, NA, NA, NA, NA, NA, NA, TRUE, NA),
-        is.agent = c(FALSE, TRUE, NA, NA, NA, NA, NA, NA, FALSE, NA)
+        is.bot = c(FALSE, FALSE, FALSE, NA, NA, FALSE, NA, NA, TRUE, NA),
+        is.agent = c(FALSE, TRUE, TRUE, NA, NA, TRUE, NA, NA, FALSE, NA)
     )
 
     ## check the results
@@ -293,10 +293,10 @@ test_that("Read the raw bot data.", {
 
     ## build the expected data.frame
     bot.data.expected = data.frame(
-        author.name = c("Thomas", "Björn", "udo", "CLAassistant", "Copilot"),
-        author.email = c("thomas@example.org", "bjoern@example.org", "udo@example.org", "nomail", "copilot@example.org"),
-        is.bot = c(TRUE, FALSE, NA, TRUE, FALSE),
-        is.agent = c(FALSE, FALSE, NA, FALSE, TRUE)
+        author.name = c("Thomas", "Björn", "udo", "CLAassistant", "Copilot", "Karl", "Fritz fritz@example.org"),
+        author.email = c("thomas@example.org", "bjoern@example.org", "udo@example.org", "nomail", "copilot@example.org", "karl@example.org", "asd@sample.org"),
+        is.bot = c(TRUE, FALSE, NA, TRUE, FALSE, FALSE, FALSE),
+        is.agent = c(FALSE, FALSE, NA, FALSE, TRUE, TRUE, TRUE)
     )
 
     ## check the results
