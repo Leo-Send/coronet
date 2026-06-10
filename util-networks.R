@@ -739,7 +739,9 @@ NetworkBuilder = R6::R6Class("NetworkBuilder",
             referenced.bys = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "referenced_by" &
                                                artifacts.net.data.raw$event.info.2 == "issue", ]
             components = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "sub_issue_added", ]
-            # sort components by date to ensure that all edges are created at the last possible date, meaning when the last sub-issue is added to the issue
+            # We currently have no information about what issue was added as a subissue in which event.
+            # Our best guess is, that the current subissues were added at the date of the last `sub_issue_added` event.
+            # Thus, we sort the components by date and remove duplicates to only keep the last date for each issue.
             components <- components[rev(order(components$date)), ]
             components <- components[!duplicated(components[[1]]), , drop = FALSE]
             connected.issues = artifacts.net.data.raw[artifacts.net.data.raw$event.name == "connected" & artifacts.net.data.raw$event.info.1 != "external", ]
