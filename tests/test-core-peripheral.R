@@ -18,7 +18,7 @@
 ## Copyright 2019 by Christian Hechtl <hechtl@fim.uni-passau.de>
 ## Copyright 2021 by Christian Hechtl <hechtl@cs.uni-saarland.de>
 ## Copyright 2023-2025 by Maximilian Löffler <s8maloef@stud.uni-saarland.de>
-## Copyright 2024-2025 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
+## Copyright 2024-2026 by Leo Sendelbach <s8lesend@stud.uni-saarland.de>
 ## All Rights Reserved.
 
 
@@ -75,8 +75,7 @@ test_that("Eigenvector classification", {
     expected.peripheral = data.frame(author.name = c("Thomas", "Björn", "udo", "Fritz fritz@example.org",
                                                      "georg", "Hans"),
                                      ## the following values are only correct with igraph version 1.2.7 or higher
-                                     eigen.centrality = c(7.071068e-01, 7.071068e-01, 3.925231e-17,
-                                                          3.925231e-17, 3.925231e-17, 3.925231e-17))
+                                     eigen.centrality = c(7.071068e-01, 7.071068e-01, 0, 0, 0, 0))
     expected = list(core = expected.core, peripheral = expected.peripheral)
 
     row.names(result[["core"]]) = NULL
