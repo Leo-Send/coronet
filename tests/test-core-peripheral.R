@@ -68,6 +68,7 @@ test_that("Eigenvector classification", {
     ## Act
     set.seed(0)
     result = get.author.class.network.eigen(network)
+    print(result)
 
     ## Assert
     expected.core = data.frame(author.name = c("Olaf"),

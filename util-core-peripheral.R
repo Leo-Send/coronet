@@ -1465,6 +1465,9 @@ get.author.class = function(author.data.frame, calc.base.name, result.limit = NU
 
     ## Get the threshold depending on all calculation base values
     author.class.threshold = get.threshold(author.data[[calc.base.name]], classification.category)
+    if (calc.base.name == "eigen.centrality") {
+        print(author.class.threshold)
+    }
 
     ## Check if the result shall be limited
     if (!is.null(result.limit)) {
