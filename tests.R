@@ -50,7 +50,7 @@ requireNamespace("patrick")
 
 ## starting tests
 do.tests = function(dir) {
-    res = testthat::test_dir(dir, reporter = "check", filter = "core")
+    res = testthat::test_dir(dir, reporter = "check")
     if (length(res[["failures"]]) > 0) {
         cat(str_c("Some R tests failed for directory '", dir, "'"))
 
